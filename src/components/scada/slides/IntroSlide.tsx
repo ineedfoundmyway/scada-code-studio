@@ -2,14 +2,14 @@ import { ArrowRight, Cpu, Workflow } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import profile from "@/assets/brunno-dev-opening.jpg.asset.json";
 import { useLanguage } from "../Language";
-
-export function IntroSlide({ onNavigate }: { onNavigate?: (index: number) => void }) {
-  const { t } = useLanguage();
-  return (
-    <div className="intro-slide flex h-full flex-col justify-center gap-10">
+export function IntroSlide({ onNavigate }: {
+    onNavigate?: (index: number) => void;
+}) {
+    const { t } = useLanguage();
+    return (<div className="intro-slide flex h-full flex-col justify-center gap-10">
       <div className="flex flex-col items-start gap-7 sm:flex-row sm:items-center">
         <a href="https://brunnodev.store" target="_blank" rel="noopener noreferrer" className="profile-link shrink-0" aria-label={t("Perfil de brunnodev")}>
-          <img src={profile.url} alt={t("Perfil de brunnodev")} className="profile-image rounded-lg border border-border object-cover" />
+          <img src={profile.url} alt={t("Perfil de brunnodev")} className="profile-image rounded-lg border border-border object-cover"/>
         </a>
         <a href="https://brunnodev.store" target="_blank" rel="noopener noreferrer" className="brand-wordmark text-5xl font-bold text-foreground transition-colors hover:text-primary">brunnodev<span className="text-primary">.</span></a>
       </div>
@@ -23,9 +23,8 @@ export function IntroSlide({ onNavigate }: { onNavigate?: (index: number) => voi
         </div>
       </div>
       <div className="flex flex-wrap gap-x-10 gap-y-4 border-t border-border pt-6">
-        {[{value:"04",label:"Cenários"},{value:"ST + LD",label:"Linguagens"},{value:"TON",label:"Tempo real"}].map(item => <div key={item.label}><div className="font-mono text-xl text-primary">{item.value}</div><div className="mt-1 text-xs text-muted-foreground">{t(item.label)}</div></div>)}
-        <Cpu className="ml-auto size-8 self-center text-accent" />
+        {[{ value: "04", label: "Cenários" }, { value: "ST + LD", label: "Linguagens" }, { value: "TON", label: "Tempo real" }].map(item => <div key={item.label}><div className="font-mono text-xl text-primary">{item.value}</div><div className="mt-1 text-xs text-muted-foreground">{t(item.label)}</div></div>)}
+        <Cpu className="ml-auto size-8 self-center text-accent"/>
       </div>
-    </div>
-  );
+    </div>);
 }

@@ -4,19 +4,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/*
- * Design system definition.
- *
- * The @theme inline block maps CSS custom properties to Tailwind utility
- * classes (e.g. --color-primary -> bg-primary, text-primary).
- *
- * The :root and .dark blocks define the actual color values using oklch.
- * All colors MUST use oklch format.
- *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
- */
+
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -189,4 +177,30 @@
   .spin-fast { animation: spin-fast 0.6s linear infinite; }
   @keyframes spin-rev { to { transform: rotate(-360deg); } }
   .spin-rev { animation: spin-rev 0.6s linear infinite; }
+}
+
+@theme inline {
+  --shadow-panel: 0 4px 30px var(--panel-shadow);
+  --shadow-pushbutton: 0 6px 0 var(--button-shadow), 0 8px 20px var(--panel-shadow);
+}
+:root {
+  --panel-shadow: oklch(0 0 0 / 0.4);
+  --button-shadow: oklch(0 0 0 / 0.5);
+}
+* { letter-spacing: 0 !important; }
+.profile-image { width: 240px; aspect-ratio: 1.04; }
+.intro-slide { max-width: 1100px; margin-inline: auto; padding-block: 24px; }
+.brand-wordmark { overflow-wrap: anywhere; }
+.slide-content > div > .grid-cols-12 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.slide-content > div > .grid-cols-12 > .col-span-4 { grid-column: span 1; min-width: 0; }
+.slide-content > div > .grid-cols-12 > .col-span-7 { grid-column: span 2; min-width: 0; }
+.slide-content > div > .grid-cols-12 > .col-span-5 { grid-column: span 1; min-width: 0; }
+@media (max-width: 1023px) {
+  .slide-content > div > .grid-cols-12 { grid-template-columns: 1fr; }
+  .slide-content > div > .grid-cols-12 > [class*="col-span-"] { grid-column: span 1; }
+  .slide-content > div > .grid-cols-12 > div { min-height: 280px; }
+  .profile-image { width: 200px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
 }
