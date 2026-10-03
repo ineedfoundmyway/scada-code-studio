@@ -1,29 +1,25 @@
+import { useLanguage } from "../Language";
 import { useEffect, useRef, useState } from "react";
 import { HMIPanel, PushButton, Lamp, Motor, StatusBar } from "../HMI";
 import { LadderRung, Contact, Coil, Wire } from "../Ladder";
 import { CodeView } from "../CodeView";
 
-const ST_CODE = `(* === Partida Estrela-Triângulo (Y-Δ) ===
-   Reduz a corrente de partida em ~1/3
-   T#5s na configuração estrela, comuta para triângulo.
-*)
-PROGRAM EstrelaTriangulo
+const ST_CODE = `PROGRAM EstrelaTriangulo
 VAR_INPUT
     S0, S1, FT : BOOL;
 END_VAR
 VAR_OUTPUT
-    K1 : BOOL;   // Contator de linha
-    KY : BOOL;   // Estrela
-    KD : BOOL;   // Triângulo
+    K1 : BOOL;
+    KY : BOOL;
+    KD : BOOL;
 END_VAR
 VAR
-    T1 : TON;          // Temporizador de comutação
-    M  : BOOL;         // Memória de marcha
+    T1 : TON;
+    M  : BOOL;
 END_VAR
 
 M := (S1 OR M) AND S0 AND FT;
 
-// Temporizador 5 segundos
 T1(IN := M, PT := T#5s);
 
 K1 := M;
@@ -33,6 +29,7 @@ KD := M AND T1.Q;
 END_PROGRAM`;
 
 export function EstrelaTrianguloSlide() {
+  const { t } = useLanguage();
   const [s1, setS1] = useState(false);
   const [s0p, setS0p] = useState(false);
   const [fault, setFault] = useState(false);
@@ -80,26 +77,20 @@ export function EstrelaTrianguloSlide() {
     <div className="h-full flex flex-col gap-4">
       <div className="flex items-end justify-between">
         <div>
-          <div className="font-mono text-xs uppercase tracking-[0.32em] text-primary mb-2">
-            04 · Cenário
-          </div>
-          <h2 className="text-4xl font-bold">Partida Estrela-Triângulo</h2>
-          <p className="text-muted-foreground mt-1">
-            Temporizador TON comuta a configuração após 5 segundos
-          </p>
+          <div className="font-mono text-xs uppercase tracking-[0.32em] text-primary mb-2">{t("04 · Cenário")}</div>
+          <h2 className="text-4xl font-bold">{t("Partida Estrela-Triângulo")}</h2>
+          <p className="text-muted-foreground mt-1">{t("Temporizador TON comuta a configuração após 5 segundos")}</p>
         </div>
-        <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground text-right">
-          Pressione S1 e aguarde<br />a transição Y → Δ
-        </div>
+        
       </div>
 
       <div className="grid grid-cols-12 gap-4 flex-1 min-h-0">
-        <HMIPanel title="HMI · Partida Y-Δ" className="col-span-4 flex flex-col">
+        <HMIPanel title={t("HMI · Partida Y-Δ")} className="col-span-4 flex flex-col">
           <div className="p-6 flex-1 flex flex-col items-center justify-around gap-4">
             <Motor running={M} fault={fault} label="M1 · 15cv" />
             <div className="w-full px-4">
               <div className="flex items-center justify-between font-mono text-[10px] text-muted-foreground mb-1">
-                <span>T1 · Temporizador</span>
+                <span>{t("T1 · Temporizador")}</span>
                 <span className="text-primary">{(elapsed / 1000).toFixed(2)}s / 5.00s</span>
               </div>
               <div className="h-2 bg-secondary rounded-full overflow-hidden border border-border">
@@ -110,22 +101,22 @@ export function EstrelaTrianguloSlide() {
               </div>
             </div>
             <div className="flex gap-4">
-              <Lamp label="K1 · Linha" on={K1} color="green" />
+              <Lamp label={t("K1 · Linha")} on={K1} color="green" />
               <Lamp label="KY · Y" on={KY} color="amber" />
               <Lamp label="KD · Δ" on={KD} color="green" />
               <Lamp label="Trip" on={fault} color="red" />
             </div>
             <div className="flex gap-4">
-              <PushButton label="S0 · Parar" color="red"
+              <PushButton label={t("S0 · Parar")} color="red"
                 pressed={s0p} onPress={() => setS0p(true)} onRelease={() => setS0p(false)} />
-              <PushButton label="S1 · Partir" color="green"
+              <PushButton label={t("S1 · Partir")} color="green"
                 pressed={s1} onPress={() => setS1(true)} onRelease={() => setS1(false)} />
               <PushButton label={fault ? "Reset" : "Trip"} color="amber"
                 momentary={false} pressed={false} onPress={() => setFault((f) => !f)} />
             </div>
           </div>
           <StatusBar items={[
-            { label: "Etapa", value: !M ? "STOP" : KY ? "ESTRELA" : "TRIÂNGULO", tone: !M ? "warn" : KY ? "warn" : "ok" },
+            { label: t("Etapa"), value: !M ? "STOP" : KY ? t("ESTRELA") : t("TRIÂNGULO"), tone: !M ? "warn" : KY ? "warn" : "ok" },
             { label: "I", value: !M ? "0 A" : KY ? "12 A" : "36 A" },
             { label: "Scan", value: "4.2 ms" },
           ]} />
@@ -175,7 +166,7 @@ export function EstrelaTrianguloSlide() {
 
         <div className="col-span-4">
           <CodeView files={[{ name: "EstrelaTriangulo.st", lang: "Structured Text", code: ST_CODE }]}
-            highlightLines={{ "EstrelaTriangulo.st": KY ? [27] : KD ? [28] : [22] }} />
+            highlightLines={{ "EstrelaTriangulo.st": KY ? [21] : KD ? [22] : [15] }} />
         </div>
       </div>
     </div>

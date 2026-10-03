@@ -1,15 +1,10 @@
+import { useLanguage } from "../Language";
 import { useEffect, useRef, useState } from "react";
 import { HMIPanel, PushButton, Lamp, StatusBar } from "../HMI";
 import { LadderRung, Contact, Coil, Wire } from "../Ladder";
 import { CodeView } from "../CodeView";
 
-const ST_CODE = `(* === Controle de Semáforo Sequencial ===
-   Sequência de tempos por fase:
-     Verde  : 6 s
-     Amarelo: 2 s
-     Vermelho: 5 s
-*)
-PROGRAM Semaforo
+const ST_CODE = `PROGRAM Semaforo
 VAR_INPUT
     START, STOP : BOOL;
 END_VAR
@@ -17,7 +12,7 @@ VAR_OUTPUT
     GREEN, YELLOW, RED : BOOL;
 END_VAR
 VAR
-    STATE : INT := 0;     // 0=OFF 1=GREEN 2=YELLOW 3=RED
+    STATE : INT := 0;
     T     : TON;
     EN    : BOOL;
 END_VAR
@@ -51,6 +46,7 @@ const PHASES = [
 ] as const;
 
 export function SemaforoSlide() {
+  const { t } = useLanguage();
   const [en, setEn] = useState(false);
   const [phase, setPhase] = useState(0);
   const [t, setT] = useState(0);
@@ -93,21 +89,15 @@ export function SemaforoSlide() {
     <div className="h-full flex flex-col gap-4">
       <div className="flex items-end justify-between">
         <div>
-          <div className="font-mono text-xs uppercase tracking-[0.32em] text-primary mb-2">
-            05 · Cenário
-          </div>
-          <h2 className="text-4xl font-bold">Semáforo Sequencial</h2>
-          <p className="text-muted-foreground mt-1">
-            Máquina de estados (CASE) com temporizador único reaproveitado
-          </p>
+          <div className="font-mono text-xs uppercase tracking-[0.32em] text-primary mb-2">{t("05 · Cenário")}</div>
+          <h2 className="text-4xl font-bold">{t("Semáforo Sequencial")}</h2>
+          <p className="text-muted-foreground mt-1">{t("Máquina de estados (CASE) com temporizador único reaproveitado")}</p>
         </div>
-        <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground text-right">
-          Acione START e observe<br />a sequência cíclica
-        </div>
+        
       </div>
 
       <div className="grid grid-cols-12 gap-4 flex-1 min-h-0">
-        <HMIPanel title="HMI · Cruzamento" className="col-span-4 flex flex-col">
+        <HMIPanel title={t("HMI · Cruzamento")} className="col-span-4 flex flex-col">
           <div className="p-6 flex-1 flex flex-col items-center justify-around gap-6">
             <div className="w-32 rounded-xl border-2 border-border bg-secondary p-4 flex flex-col gap-3">
               <SemLamp on={RED} color="bg-signal-fault" glow="glow-fault" />
@@ -116,7 +106,7 @@ export function SemaforoSlide() {
             </div>
             <div className="w-full px-2">
               <div className="flex justify-between font-mono text-[10px] text-muted-foreground mb-1">
-                <span>FASE {currentName}</span>
+                <span>{t("FASE")}{currentName}</span>
                 <span className="text-primary">
                   {(t / 1000).toFixed(2)}s / {(PHASES[phase].dur / 1000).toFixed(0)}s
                 </span>
@@ -134,9 +124,9 @@ export function SemaforoSlide() {
             </div>
           </div>
           <StatusBar items={[
-            { label: "Estado", value: en ? currentName : "OFF", tone: en ? "ok" : "warn" },
-            { label: "Ciclo", value: `${phase + 1}/3` },
-            { label: "Modo", value: "AUTO", tone: "ok" },
+            { label: t("Estado"), value: en ? currentName : "OFF", tone: en ? "ok" : "warn" },
+            { label: t("Ciclo"), value: `${phase + 1}/3` },
+            { label: t("Modo"), value: "AUTO", tone: "ok" },
           ]} />
         </HMIPanel>
 
@@ -176,7 +166,7 @@ export function SemaforoSlide() {
 
         <div className="col-span-4">
           <CodeView files={[{ name: "Semaforo.st", lang: "Structured Text", code: ST_CODE }]}
-            highlightLines={{ "Semaforo.st": GREEN ? [30] : YELLOW ? [32] : RED ? [34] : [25] }} />
+            highlightLines={{ "Semaforo.st": GREEN ? [20] : YELLOW ? [22] : RED ? [24] : [13] }} />
         </div>
       </div>
     </div>

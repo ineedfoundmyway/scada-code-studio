@@ -1,18 +1,10 @@
+import { useLanguage } from "../Language";
 import { useEffect, useState } from "react";
 import { HMIPanel, PushButton, Lamp, Motor, StatusBar } from "../HMI";
 import { LadderRung, Contact, Coil, Wire } from "../Ladder";
 import { CodeView } from "../CodeView";
 
-const ST_CODE = `(* === Reversão de Motor com Intertravamento ===
-   S0  : PARAR        (NF)
-   S1  : DIRETO       (NA)
-   S2  : REVERSO      (NA)
-   FT  : Térmico      (NF)
-   K1  : Contator avanço
-   K2  : Contator recuo
-   Intertravamento elétrico evita K1 e K2 simultâneos.
-*)
-PROGRAM Reversao
+const ST_CODE = `PROGRAM Reversao
 VAR_INPUT
     S0, S1, S2, FT : BOOL;
 END_VAR
@@ -20,15 +12,14 @@ VAR_OUTPUT
     K1, K2 : BOOL;
 END_VAR
 
-// Avanço — só liga se reverso (K2) estiver desligado
 K1 := (S1 OR K1) AND S0 AND FT AND NOT K2 AND NOT S2;
 
-// Recuo — só liga se avanço (K1) estiver desligado
 K2 := (S2 OR K2) AND S0 AND FT AND NOT K1 AND NOT S1;
 
 END_PROGRAM`;
 
 export function ReversaoSlide() {
+  const { t } = useLanguage();
   const [s1, setS1] = useState(false);
   const [s2, setS2] = useState(false);
   const [s0p, setS0p] = useState(false);
@@ -59,21 +50,15 @@ export function ReversaoSlide() {
     <div className="h-full flex flex-col gap-4">
       <div className="flex items-end justify-between">
         <div>
-          <div className="font-mono text-xs uppercase tracking-[0.32em] text-primary mb-2">
-            03 · Cenário
-          </div>
-          <h2 className="text-4xl font-bold">Reversão de Motor</h2>
-          <p className="text-muted-foreground mt-1">
-            Intertravamento elétrico — K1 bloqueia K2 e vice-versa
-          </p>
+          <div className="font-mono text-xs uppercase tracking-[0.32em] text-primary mb-2">{t("03 · Cenário")}</div>
+          <h2 className="text-4xl font-bold">{t("Reversão de Motor")}</h2>
+          <p className="text-muted-foreground mt-1">{t("Intertravamento elétrico — K1 bloqueia K2 e vice-versa")}</p>
         </div>
-        <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground text-right">
-          Pare antes de inverter o sentido<br />Note os contatos NF cruzados
-        </div>
+        
       </div>
 
       <div className="grid grid-cols-12 gap-4 flex-1 min-h-0">
-        <HMIPanel title="HMI · Painel" className="col-span-4 flex flex-col">
+        <HMIPanel title={t("HMI · Painel")} className="col-span-4 flex flex-col">
           <div className="p-6 flex-1 flex flex-col items-center justify-around gap-5">
             <Motor running={K1 || K2} reverse={K2} fault={fault} label="M1" />
             <div className="flex gap-4">
@@ -82,13 +67,13 @@ export function ReversaoSlide() {
               <Lamp label="Trip" on={fault} color="red" />
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <PushButton label="S0 · Parar" color="red"
+              <PushButton label={t("S0 · Parar")} color="red"
                 pressed={s0p} onPress={() => setS0p(true)} onRelease={() => setS0p(false)} />
               <PushButton label={fault ? "Reset" : "Trip"} color="amber"
                 momentary={false} pressed={false} onPress={() => setFault((f) => !f)} />
-              <PushButton label="S1 · Direto" color="green"
+              <PushButton label={t("S1 · Direto")} color="green"
                 pressed={s1} onPress={() => setS1(true)} onRelease={() => setS1(false)} />
-              <PushButton label="S2 · Reverso" color="blue"
+              <PushButton label={t("S2 · Reverso")} color="blue"
                 pressed={s2} onPress={() => setS2(true)} onRelease={() => setS2(false)} />
             </div>
           </div>
@@ -138,7 +123,7 @@ export function ReversaoSlide() {
 
         <div className="col-span-4">
           <CodeView files={[{ name: "Reversao.st", lang: "Structured Text", code: ST_CODE }]}
-            highlightLines={{ "Reversao.st": [K1 ? 19 : K2 ? 22 : 19] }} />
+            highlightLines={{ "Reversao.st": [K1 ? 8 : K2 ? 10 : 8] }} />
         </div>
       </div>
     </div>
