@@ -1,24 +1,36 @@
-# SCADA Code Studio
+# SCADA Live
 
-faça um apresentacao scada de plc de comandos eletricos, onde eu possa interagir e ver o codigo muito profissional
+Apresentação interativa de CLP e comandos elétricos, em português e inglês.
 
-This project was built with [Lovable](https://lovable.dev).
+## Conteúdo
 
-## Build with Lovable
+- Arquitetura SCADA, PLC, rede industrial e I/O.
+- Partida direta, reversão, estrela-triângulo e semáforo.
+- Simulações com botoeiras, indicadores, Ladder e Structured Text.
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/401f8f64-382a-4df0-9e8c-d31da6b1956b).
+Simulação educacional. Não há conexão com equipamentos físicos.
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+## Desenvolvimento
 
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+Requisitos: Bun e Node.js.
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+bun install
+bun run dev
 ```
+
+## Autor
+
+[brunnodev](https://brunnodev.store)
+
+## Coautoria
+
+Use este rodapé na mensagem do commit ou do merge aprovado no GitHub:
+
+```text
+Co-authored-by: brunnojob <contato@brunnodev.store>
+```
+
+## GitHub
+
+Conecte este projeto pelo menu **+ → GitHub → Connect project** no Lovable. Após a conexão, as alterações são sincronizadas automaticamente. Pull requests e merges são realizados no repositório conectado.

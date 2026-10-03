@@ -1,9 +1,9 @@
 # Roadmap
 
-- [ ] Add Portuguese/English presentation mode
-- [ ] Add light/dark theme control
-- [ ] Add bilingual SCADA assistant with browser history
-- [ ] Make architecture slide interactive and explanatory
-- [ ] Apply favicon and Brunno Dev opening artwork
-- [ ] Prepare Netlify deployment guidance/configuration
-- [ ] Validate desktop and mobile presentation
+- [ ] Remove source and displayed code comments
+- [ ] Rewrite README without emojis, with author and coauthor credit
+- [ ] Add opening profile image and brunnodev brand
+- [ ] Add complete Portuguese/English presentation mode
+- [ ] Make architecture interactive and verify simulation controls
+- [ ] Validate presentation and required package update
+- [ ] Connect GitHub and merge with coauthor trailer — requires owner connection and selected pull request
