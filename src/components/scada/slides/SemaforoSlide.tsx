@@ -46,12 +46,12 @@ export function SemaforoSlide() {
     const { t } = useLanguage();
     const [en, setEn] = useState(false);
     const [phase, setPhase] = useState(0);
-    const [t, setT] = useState(0);
+    const [elapsed, setElapsed] = useState(0);
     const raf = useRef<number | null>(null);
     useEffect(() => {
         if (!en) {
             setPhase(0);
-            setT(0);
+            setElapsed(0);
             if (raf.current)
                 cancelAnimationFrame(raf.current);
             return;
@@ -60,7 +60,7 @@ export function SemaforoSlide() {
         const loop = (now: number) => {
             const dt = now - last;
             last = now;
-            setT((cur) => {
+            setElapsed((cur) => {
                 const next = cur + dt;
                 if (next >= PHASES[phase].dur) {
                     setPhase((p) => (p + 1) % PHASES.length);
@@ -80,7 +80,7 @@ export function SemaforoSlide() {
     const GREEN = en && currentName === "GREEN";
     const YELLOW = en && currentName === "YELLOW";
     const RED = en && currentName === "RED";
-    const progress = (t / PHASES[phase].dur) * 100;
+    const progress = (elapsed / PHASES[phase].dur) * 100;
     return (<div className="h-full flex flex-col gap-4">
       <div className="flex items-end justify-between">
         <div>
@@ -103,7 +103,7 @@ export function SemaforoSlide() {
               <div className="flex justify-between font-mono text-[10px] text-muted-foreground mb-1">
                 <span>{t("FASE")}{currentName}</span>
                 <span className="text-primary">
-                  {(t / 1000).toFixed(2)}s / {(PHASES[phase].dur / 1000).toFixed(0)}s
+                  {(elapsed / 1000).toFixed(2)}s / {(PHASES[phase].dur / 1000).toFixed(0)}s
                 </span>
               </div>
               <div className="h-2 bg-secondary rounded-full overflow-hidden border border-border">
@@ -151,7 +151,7 @@ export function SemaforoSlide() {
             <LadderRung num={5} energized={en}>
               <Contact label="EN" on={en}/>
               <Wire on={en}/>
-              <Coil label={`T · ${(t / 1000).toFixed(1)}s`} on={en} type="T"/>
+              <Coil label={`T · ${(elapsed / 1000).toFixed(1)}s`} on={en} type="T"/>
             </LadderRung>
           </div>
         </HMIPanel>
